@@ -26,6 +26,42 @@ attributes and will need occasional maintenance as the UI changes.
 
 Handles may be passed as `@name`, `name`, or a full `https://x.com/name` URL.
 
+## Roadmap
+
+The current scope is intentionally minimal: **sign in and start posting**.
+Everything below is a TODO, modelled on the capabilities of
+[stickerdaniel/linkedin-mcp-server](https://github.com/stickerdaniel/linkedin-mcp-server)
+(the project that inspired this one) and adapted to X.
+
+**Near-term (the current focus)**
+
+- [ ] Interactive sign-in flow — a `--login` / `--logout` CLI flag that opens a
+  browser for manual auth, persisting the session instead of pasting cookies.
+- [ ] `post_tweet(text)` — publish a post from the logged-in account.
+
+**Write actions (X-native, inspired by `connect_with_person` / `send_message`)**
+
+- [ ] `reply_to_tweet`, `quote_tweet`
+- [ ] `like_tweet`, `repost`
+- [ ] `delete_tweet`
+- [ ] `follow` / `unfollow`
+- [ ] `send_dm`, `get_inbox`, `get_conversation`, `search_conversations`
+  (mirrors LinkedIn's messaging tools)
+
+**Read actions**
+
+- [ ] `get_my_profile` — the authenticated user's own profile (`get_my_profile`).
+- [ ] `get_home_timeline` — the logged-in home feed (`get_feed`).
+- [ ] `search_users` — people search (`search_people`).
+- [ ] `get_who_to_follow` — recommended accounts (`get_sidebar_profiles`).
+
+**Session & tooling**
+
+- [ ] `close_session` tool to terminate the browser and clean up.
+- [ ] Streamable HTTP transport in addition to stdio.
+- [ ] Claude Desktop one-click `.mcpb` bundle.
+- [ ] Secure credential storage via the system keyring.
+
 ## Authentication
 
 Most X content requires a logged-in session. Provide your session cookies via
@@ -101,6 +137,15 @@ for the full list: `X_HEADLESS`, `X_USER_DATA_DIR`, `X_BROWSER_CHANNEL`,
 For research and personal use. Scraping may conflict with X's Terms of Service;
 you are responsible for how you use this tool. Respect rate limits and applicable
 law.
+
+## Credits
+
+This project is directly inspired by
+[stickerdaniel/linkedin-mcp-server](https://github.com/stickerdaniel/linkedin-mcp-server)
+by [Daniel Sticker](https://github.com/stickerdaniel) — a stealth-browser MCP
+server for LinkedIn. The architecture (Patchright + FastMCP, cookie/session auth,
+`uvx` distribution) and the [Roadmap](#roadmap) above follow its design. Go give
+it a star.
 
 ## License
 
