@@ -104,5 +104,8 @@ throwaway message and delete it afterward.
 
 ## Disclaimer
 
-This tool is for research and personal use. Scraping may conflict with X's Terms
-of Service; you are responsible for how you use it. Respect rate limits.
+This tool is for personal and research use only. X's Terms of Service prohibit
+scraping and automated access without consent, and accounts can be restricted or
+banned; you are responsible for how you use it. See
+[Disclaimer & responsible use](README.md#disclaimer--responsible-use) for the
+full picture and the licensed alternative.

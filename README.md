@@ -7,6 +7,11 @@ with `uvx`, so any MCP client can launch it with zero local setup.
 
 > Inspired by [stickerdaniel/linkedin-mcp-server](https://github.com/stickerdaniel/linkedin-mcp-server).
 
+> **Disclaimer:** This is an independent, community project. It is not affiliated
+> with, authorized by, endorsed by, or sponsored by X Corp. "X" and "Twitter" are
+> trademarks of X Corp, used here only descriptively to identify the third-party
+> service this software interoperates with.
+
 ## Why a browser instead of the API
 
 X's official API is expensive and heavily gated. This server drives a real,
@@ -227,11 +232,36 @@ Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) for setup,
 conventions (notably: `data-testid` selectors only, browser-driven not API), and
 the current feature status.
 
-## Disclaimer
+## Disclaimer & responsible use
 
-For research and personal use. Scraping may conflict with X's Terms of Service;
-you are responsible for how you use this tool. Respect rate limits and applicable
-law.
+**This tool is for personal and research use only, and comes with no warranty of
+any kind.** Use it in accordance with [X's Terms of Service](https://x.com/tos).
+
+### Is this safe? Will I get banned?
+
+This server controls a real, logged-in browser session — it does **not** exploit
+undocumented APIs or bypass authentication. That said, X's Terms of Service
+prohibit scraping and automated access without prior consent, and accounts using
+automated tools **can be rate-limited, restricted, or banned**. There is no
+guarantee of account safety. Use at your own risk, and prefer an account you can
+afford to lose.
+
+Because the session is authenticated, you have agreed to X's terms — so the risk
+here is contractual (breach of the ToS) and operational (account action), not
+just abstract. See the [LinkedIn precedent (hiQ v. LinkedIn)](https://en.wikipedia.org/wiki/HiQ_Labs_v._LinkedIn)
+for how courts have treated authenticated scraping versus public-data scraping.
+
+### Keep volume sane
+
+You are responsible for the volume of automation you run. Use it sparingly,
+keep pacing human-like, respect rate limits, and prompt your agents responsibly.
+Do not redistribute, resell, or build public datasets from the output.
+
+### For anything commercial or at scale
+
+Use the [official X API](https://developer.x.com/), or obtain written consent
+from X. The browser route is not defensible at scale — switch to a licensed path
+before you grow beyond personal use.
 
 ## Credits
 
