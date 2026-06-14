@@ -15,9 +15,17 @@ class NavigationError(XMCPError):
     """Raised when a page fails to load or times out."""
 
 
+class BrowserLaunchError(XMCPError):
+    """Raised when the browser cannot be launched or its binary cannot be provisioned."""
+
+
 class ParseError(XMCPError):
     """Raised when expected content could not be extracted from the page."""
 
 
 class RateLimitError(XMCPError):
     """Raised when X signals that requests are being throttled."""
+
+
+class ActionError(XMCPError):
+    """Raised when a write action (post, reply, like, follow) could not be completed."""

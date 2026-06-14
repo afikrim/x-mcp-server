@@ -23,8 +23,17 @@ attributes and will need occasional maintenance as the UI changes.
 | `get_tweet(url_or_id)` | A single post by URL or numeric status id. |
 | `search_tweets(query, limit=20, latest=True)` | Search across X; supports operators like `from:`, `min_faves:`, `#tag`. |
 | `check_auth()` | Diagnose whether the session is logged in. |
+| `login(timeout_seconds=180)` | Open a visible browser and sign in interactively; persists the session. |
+| `login_with_credentials()` | Best-effort automated DOM login from `X_USERNAME`/`X_PASSWORD` (no 2FA). |
+| `post_tweet(text)` | Publish a post from the logged-in account. |
+| `reply_to_tweet(url_or_id, text)` | Reply to an existing post. |
+| `like_tweet(url_or_id)` | Like a post. |
+| `follow_user(username)` | Follow a user from their profile. |
 
 Handles may be passed as `@name`, `name`, or a full `https://x.com/name` URL.
+Write tools require an authenticated session (run `login` or set `X_AUTH_TOKEN`).
+See [docs/RESEARCH.md](docs/RESEARCH.md) for the reverse-engineered login/post
+HTTP flow behind a future browserless implementation.
 
 ## Roadmap
 
@@ -35,16 +44,22 @@ Everything below is a TODO, modelled on the capabilities of
 
 **Near-term (the current focus)**
 
-- [ ] Interactive sign-in flow — a `--login` / `--logout` CLI flag that opens a
-  browser for manual auth, persisting the session instead of pasting cookies.
-- [ ] `post_tweet(text)` — publish a post from the logged-in account.
+- [x] Interactive sign-in — the `login` tool opens a browser for manual auth and
+  persists the session (run with `X_HEADLESS=false`). Cookie auth still works.
+- [x] `post_tweet(text)` — publish a post from the logged-in account.
+
+> Scaffolded but **not yet validated against live X** — selectors and the compose
+> DOM drift. Verify with a real session before trusting output.
 
 **Write actions (X-native, inspired by `connect_with_person` / `send_message`)**
 
-- [ ] `reply_to_tweet`, `quote_tweet`
-- [ ] `like_tweet`, `repost`
+- [x] `reply_to_tweet`
+- [ ] `quote_tweet`
+- [x] `like_tweet`
+- [ ] `repost`
 - [ ] `delete_tweet`
-- [ ] `follow` / `unfollow`
+- [x] `follow_user`
+- [ ] `unfollow`
 - [ ] `send_dm`, `get_inbox`, `get_conversation`, `search_conversations`
   (mirrors LinkedIn's messaging tools)
 
@@ -64,8 +79,21 @@ Everything below is a TODO, modelled on the capabilities of
 
 ## Authentication
 
-Most X content requires a logged-in session. Provide your session cookies via
-environment variables (copy `.env.example` to `.env`):
+Most X content requires a logged-in session. Two options:
+
+### Option 1: Interactive login (recommended)
+
+```bash
+uv run x-mcp-server --login
+```
+
+This opens a browser where you sign in manually (handles 2FA and challenges).
+The session is saved to `X_USER_DATA_DIR` (default: `~/.x-mcp/profile`) and reused
+on all future runs — no cookie management needed.
+
+### Option 2: Manual session cookies
+
+Set environment variables in `.env` (copy from `.env.example`):
 
 ```bash
 X_AUTH_TOKEN=...   # the `auth_token` cookie from x.com
@@ -75,24 +103,38 @@ X_CSRF_TOKEN=...   # the `ct0` cookie (optional but recommended)
 To grab them: log in to x.com, open DevTools → Application → Cookies →
 `https://x.com`, and copy `auth_token` and `ct0`.
 
-Alternatively, run once with `X_HEADLESS=false` and log in interactively; the
-session is persisted in `X_USER_DATA_DIR` for subsequent headless runs.
+### Verify authentication
+
+```bash
+uv run x-mcp-server --check-auth
+```
+
+### Clear the saved session
+
+```bash
+uv run x-mcp-server --logout
+```
 
 ## Run
 
-### With uvx (recommended)
+### With uvx, straight from GitHub (recommended)
+
+No PyPI install needed — `uvx` runs it directly from the repo:
 
 ```bash
-uvx --from . x-mcp-server          # from a checkout
-# once published to PyPI:
-uvx x-mcp-server
+# one-time interactive login (opens a browser, saves the session)
+uvx --from git+https://github.com/afikrim/x-mcp-server.git x-mcp-server --login
+
+# then run the server
+uvx --from git+https://github.com/afikrim/x-mcp-server.git x-mcp-server
 ```
 
-First run needs the browser binaries:
+Pin a tag or commit for reproducibility, e.g.
+`git+https://github.com/afikrim/x-mcp-server.git@v0.1.0`.
 
-```bash
-uvx --from . --with patchright patchright install chromium
-```
+The Chromium browser is **auto-provisioned on first launch** if it isn't already
+present, so there's no separate `patchright install` step. (It downloads ~150MB
+once into the Patchright browser cache.)
 
 ### MCP client config
 
@@ -101,23 +143,45 @@ uvx --from . --with patchright patchright install chromium
   "mcpServers": {
     "x": {
       "command": "uvx",
-      "args": ["x-mcp-server"],
-      "env": {
-        "X_AUTH_TOKEN": "your_auth_token",
-        "X_CSRF_TOKEN": "your_ct0"
-      }
+      "args": [
+        "--from",
+        "git+https://github.com/afikrim/x-mcp-server.git",
+        "x-mcp-server"
+      ]
     }
   }
 }
 ```
+
+No `env` block is needed once you've run `--login` — the session is read from
+`~/.x-mcp/profile`. (You can still pass `X_AUTH_TOKEN` / `X_CSRF_TOKEN` instead.)
 
 ### Local development
 
 ```bash
 uv sync
 uv run patchright install chromium
+
+# Option 1: Interactive login (saves session for future runs)
+uv run x-mcp-server --login
+
+# Option 2: Run the server (with X_AUTH_TOKEN/X_CSRF_TOKEN from .env)
 uv run x-mcp-server
+
+# Check auth status
+uv run x-mcp-server --check-auth
+
+# Clear the saved session
+uv run x-mcp-server --logout
 ```
+
+**CLI flags:**
+
+- `--login` — Open browser for interactive sign-in, save session.
+- `--logout` — Clear the saved browser profile.
+- `--check-auth` — Check if the session is authenticated and exit.
+- `--no-headless` — Show the browser window (useful for debugging login).
+- `--log-level {DEBUG,INFO,WARNING,ERROR}` — Set verbosity (default: INFO).
 
 ### Docker
 

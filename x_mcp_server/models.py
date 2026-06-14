@@ -32,3 +32,17 @@ class Profile(BaseModel):
     following_count: str | None = None
     followers_count: str | None = None
     verified: bool = False
+
+
+class ActionResult(BaseModel):
+    """Outcome of a write action (post, reply, like, follow, login)."""
+
+    ok: bool = Field(description="Whether the action completed successfully.")
+    action: str = Field(description="The action that was attempted, e.g. 'post_tweet'.")
+    message: str = Field(default="", description="Human-readable detail about the outcome.")
+    url: str | None = Field(
+        default=None, description="Permalink to the created/affected post, if any."
+    )
+    id: str | None = Field(
+        default=None, description="Numeric status id of the created/affected post, if resolvable."
+    )

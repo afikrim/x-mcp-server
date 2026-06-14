@@ -5,8 +5,8 @@ from __future__ import annotations
 import re
 
 from ..browser import get_session
-from ..extract import extract_tweets, normalize_handle
 from ..exceptions import ParseError
+from ..extract import extract_tweets, normalize_handle
 from ..models import Tweet
 from ._common import collect_tweets
 

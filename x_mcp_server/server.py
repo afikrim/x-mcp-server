@@ -24,11 +24,14 @@ def build_server() -> FastMCP:
     mcp = FastMCP(
         name="x-mcp-server",
         instructions=(
-            "Scrapes public content from X (formerly Twitter) using a stealth "
-            "browser. Use get_profile for user details, get_user_tweets for a "
-            "user's recent posts, get_tweet for a single post, and search_tweets "
-            "to query across X. Handles may be passed as '@name', 'name', or a "
-            "full profile URL."
+            "Reads and writes content on X (formerly Twitter) using a stealth "
+            "browser. Read: get_profile for user details, get_user_tweets for a "
+            "user's recent posts, get_tweet for a single post, search_tweets to "
+            "query across X. Write (requires auth): post_tweet, reply_to_tweet, "
+            "like_tweet, follow_user. Auth: call login once with a visible browser "
+            "(X_HEADLESS=false) to sign in interactively, or supply X_AUTH_TOKEN. "
+            "Use check_auth to diagnose empty results. Handles may be passed as "
+            "'@name', 'name', or a full profile URL."
         ),
     )
 

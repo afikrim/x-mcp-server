@@ -98,7 +98,8 @@ _PROFILE_JS = r"""
 _FOLLOW_JS = r"""
 () => {
   const out = { following_count: null, followers_count: null };
-  const links = Array.from(document.querySelectorAll('a[href$="/following"], a[href$="/verified_followers"], a[href$="/followers"]'));
+  const sel = 'a[href$="/following"], a[href$="/verified_followers"], a[href$="/followers"]';
+  const links = Array.from(document.querySelectorAll(sel));
   for (const l of links) {
     const span = l.querySelector('span');
     const val = span ? span.textContent.trim() : null;
