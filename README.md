@@ -221,6 +221,12 @@ All settings are environment variables (prefix `X_`). See [`.env.example`](.env.
 for the full list: `X_HEADLESS`, `X_USER_DATA_DIR`, `X_BROWSER_CHANNEL`,
 `X_NAV_TIMEOUT_MS`, `X_LOG_LEVEL`.
 
+## Contributing
+
+Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) for setup,
+conventions (notably: `data-testid` selectors only, browser-driven not API), and
+the current feature status.
+
 ## Disclaimer
 
 For research and personal use. Scraping may conflict with X's Terms of Service;
