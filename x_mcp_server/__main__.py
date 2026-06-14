@@ -11,6 +11,7 @@ from pathlib import Path
 
 from .browser import get_session
 from .config import get_settings
+from .install import CLIENTS, install
 from .server import mcp
 from .tools.auth import login
 
@@ -99,6 +100,15 @@ def main() -> None:
         help="Check if the current session is authenticated and exit.",
     )
     parser.add_argument(
+        "--install",
+        choices=CLIENTS,
+        metavar="CLIENT",
+        help=(
+            "Install this server into an MCP client config and exit. "
+            f"One of: {', '.join(CLIENTS)}."
+        ),
+    )
+    parser.add_argument(
         "--no-headless",
         action="store_true",
         help="Show the browser window (useful for debugging or login).",
@@ -119,7 +129,15 @@ def main() -> None:
     if args.login or args.no_headless:
         get_settings().headless = False
 
-    if args.logout:
+    if args.install:
+        _setup_logging(args.log_level)
+        try:
+            print(f"✓ {install(args.install)}")
+            sys.exit(0)
+        except Exception as exc:  # noqa: BLE001 - surfaced to the user
+            print(f"✗ {exc}")
+            sys.exit(1)
+    elif args.logout:
         _logout()
     elif args.check_auth:
         sys.exit(0 if asyncio.run(_check_auth()) else 1)

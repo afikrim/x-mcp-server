@@ -136,12 +136,36 @@ The Chromium browser is **auto-provisioned on first launch** if it isn't already
 present, so there's no separate `patchright install` step. (It downloads ~150MB
 once into the Patchright browser cache.)
 
-### MCP client config
+### Install into an MCP client (automatic)
+
+`--install` writes the config for you, merging into the client's existing servers
+(it never clobbers other entries) and using each client's own CLI when available:
+
+```bash
+uvx --from git+https://github.com/afikrim/x-mcp-server.git x-mcp-server --install claude-desktop
+uvx --from git+https://github.com/afikrim/x-mcp-server.git x-mcp-server --install claude-code
+uvx --from git+https://github.com/afikrim/x-mcp-server.git x-mcp-server --install codex
+uvx --from git+https://github.com/afikrim/x-mcp-server.git x-mcp-server --install opencode
+```
+
+| Client | Config written |
+| --- | --- |
+| `claude-desktop` | `claude_desktop_config.json` (platform-specific path) |
+| `claude-code` | `claude mcp add-json` (user scope), else `~/.claude.json` |
+| `codex` | `codex mcp add`, else `~/.codex/config.toml` |
+| `opencode` | `~/.config/opencode/opencode.json` |
+
+Restart the client afterward. Run `--login` once (see above) so the session
+exists before the client first calls a tool.
+
+### MCP client config (manual)
+
+If you'd rather configure by hand:
 
 ```json
 {
   "mcpServers": {
-    "x": {
+    "x-mcp-server": {
       "command": "uvx",
       "args": [
         "--from",
@@ -180,6 +204,7 @@ uv run x-mcp-server --logout
 - `--login` — Open browser for interactive sign-in, save session.
 - `--logout` — Clear the saved browser profile.
 - `--check-auth` — Check if the session is authenticated and exit.
+- `--install {claude-desktop,claude-code,codex,opencode}` — Register the server in a client's config and exit.
 - `--no-headless` — Show the browser window (useful for debugging login).
 - `--log-level {DEBUG,INFO,WARNING,ERROR}` — Set verbosity (default: INFO).
 

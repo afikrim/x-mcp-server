@@ -19,6 +19,10 @@ class BrowserLaunchError(XMCPError):
     """Raised when the browser cannot be launched or its binary cannot be provisioned."""
 
 
+class InstallError(XMCPError):
+    """Raised when the server cannot be installed into an MCP client config."""
+
+
 class ParseError(XMCPError):
     """Raised when expected content could not be extracted from the page."""
 
