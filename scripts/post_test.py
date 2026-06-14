@@ -1,7 +1,7 @@
 """Manual smoke test for the compose flow. POSTS to the logged-in account.
 
 Runs the browser visibly so you can watch the type + click happen. Requires a
-prior `uv run x-mcp-server --login` (the session is read from X_USER_DATA_DIR).
+prior `uv run mcp-server-x --login` (the session is read from X_USER_DATA_DIR).
 
 Usage:
     uv run python scripts/post_test.py "hello from x-mcp-server"

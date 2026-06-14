@@ -22,7 +22,7 @@ def build_server() -> FastMCP:
     )
 
     mcp = FastMCP(
-        name="x-mcp-server",
+        name="mcp-server-x",
         instructions=(
             "Reads and writes content on X (formerly Twitter) using a stealth "
             "browser. Read: get_profile for user details, get_user_tweets for a "

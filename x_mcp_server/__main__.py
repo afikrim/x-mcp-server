@@ -80,7 +80,7 @@ def _logout() -> None:
 def main() -> None:
     """CLI entry point with support for login, logout, and server modes."""
     parser = argparse.ArgumentParser(
-        prog="x-mcp-server",
+        prog="mcp-server-x",
         description="X (Twitter) scraping MCP server powered by Patchright.",
     )
 

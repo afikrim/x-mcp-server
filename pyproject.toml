@@ -1,6 +1,6 @@
 [project]
-name = "x-mcp-server"
-version = "0.1.0"
+name = "mcp-server-x"
+version = "0.2.2"
 description = "An MCP server that scrapes X (formerly Twitter) using a stealth Patchright browser, exposed over FastMCP."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -25,7 +25,7 @@ Repository = "https://github.com/afikrim/x-mcp-server"
 Issues = "https://github.com/afikrim/x-mcp-server/issues"
 
 [project.scripts]
-x-mcp-server = "x_mcp_server.__main__:main"
+mcp-server-x = "x_mcp_server.__main__:main"
 
 [project.optional-dependencies]
 dev = [

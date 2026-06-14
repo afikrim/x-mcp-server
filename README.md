@@ -89,7 +89,7 @@ Most X content requires a logged-in session. Two options:
 ### Option 1: Interactive login (recommended)
 
 ```bash
-uv run x-mcp-server --login
+uv run mcp-server-x --login
 ```
 
 This opens a browser where you sign in manually (handles 2FA and challenges).
@@ -111,31 +111,43 @@ To grab them: log in to x.com, open DevTools → Application → Cookies →
 ### Verify authentication
 
 ```bash
-uv run x-mcp-server --check-auth
+uv run mcp-server-x --check-auth
 ```
 
 ### Clear the saved session
 
 ```bash
-uv run x-mcp-server --logout
+uv run mcp-server-x --logout
 ```
 
 ## Run
 
-### With uvx, straight from GitHub (recommended)
+### With uvx, from PyPI (recommended)
 
-No PyPI install needed — `uvx` runs it directly from the repo:
+Published as [`mcp-server-x`](https://pypi.org/project/mcp-server-x/) — `uvx` runs
+it without a local install:
 
 ```bash
 # one-time interactive login (opens a browser, saves the session)
-uvx --from git+https://github.com/afikrim/x-mcp-server.git x-mcp-server --login
+uvx mcp-server-x --login
 
 # then run the server
-uvx --from git+https://github.com/afikrim/x-mcp-server.git x-mcp-server
+uvx mcp-server-x
+```
+
+Pin a version for reproducibility, e.g. `uvx mcp-server-x@0.2.2`.
+
+### With uvx, straight from GitHub
+
+To run an unreleased commit, point `uvx` at the repo instead:
+
+```bash
+uvx --from git+https://github.com/afikrim/x-mcp-server.git mcp-server-x --login
+uvx --from git+https://github.com/afikrim/x-mcp-server.git mcp-server-x
 ```
 
 Pin a tag or commit for reproducibility, e.g.
-`git+https://github.com/afikrim/x-mcp-server.git@v0.1.0`.
+`git+https://github.com/afikrim/x-mcp-server.git@v0.2.2`.
 
 The Chromium browser is **auto-provisioned on first launch** if it isn't already
 present, so there's no separate `patchright install` step. (It downloads ~150MB
@@ -147,10 +159,10 @@ once into the Patchright browser cache.)
 (it never clobbers other entries) and using each client's own CLI when available:
 
 ```bash
-uvx --from git+https://github.com/afikrim/x-mcp-server.git x-mcp-server --install claude-desktop
-uvx --from git+https://github.com/afikrim/x-mcp-server.git x-mcp-server --install claude-code
-uvx --from git+https://github.com/afikrim/x-mcp-server.git x-mcp-server --install codex
-uvx --from git+https://github.com/afikrim/x-mcp-server.git x-mcp-server --install opencode
+uvx mcp-server-x --install claude-desktop
+uvx mcp-server-x --install claude-code
+uvx mcp-server-x --install codex
+uvx mcp-server-x --install opencode
 ```
 
 | Client | Config written |
@@ -170,13 +182,9 @@ If you'd rather configure by hand:
 ```json
 {
   "mcpServers": {
-    "x-mcp-server": {
+    "mcp-server-x": {
       "command": "uvx",
-      "args": [
-        "--from",
-        "git+https://github.com/afikrim/x-mcp-server.git",
-        "x-mcp-server"
-      ]
+      "args": ["mcp-server-x"]
     }
   }
 }
@@ -192,16 +200,16 @@ uv sync
 uv run patchright install chromium
 
 # Option 1: Interactive login (saves session for future runs)
-uv run x-mcp-server --login
+uv run mcp-server-x --login
 
 # Option 2: Run the server (with X_AUTH_TOKEN/X_CSRF_TOKEN from .env)
-uv run x-mcp-server
+uv run mcp-server-x
 
 # Check auth status
-uv run x-mcp-server --check-auth
+uv run mcp-server-x --check-auth
 
 # Clear the saved session
-uv run x-mcp-server --logout
+uv run mcp-server-x --logout
 ```
 
 **CLI flags:**

@@ -28,14 +28,14 @@ Requires [`uv`](https://docs.astral.sh/uv/) and Python >= 3.11.
 uv sync                              # install deps into .venv
 uv run patchright install chromium   # one-time browser download
 
-uv run x-mcp-server --login          # sign in once (saves to ~/.x-mcp/profile)
-uv run x-mcp-server --check-auth      # confirm the session is valid
+uv run mcp-server-x --login          # sign in once (saves to ~/.x-mcp/profile)
+uv run mcp-server-x --check-auth      # confirm the session is valid
 ```
 
 To run the server locally over stdio:
 
 ```bash
-uv run x-mcp-server
+uv run mcp-server-x
 ```
 
 ## Before you open a PR
@@ -72,7 +72,7 @@ These keep the scraper resilient. Please follow them.
 ## Architecture (quick map)
 
 - `server.py` — builds the FastMCP instance, registers tools, defines `check_auth`.
-- `__main__.py` — the `x-mcp-server` CLI: `--login`, `--logout`, `--check-auth`,
+- `__main__.py` — the `mcp-server-x` CLI: `--login`, `--logout`, `--check-auth`,
   `--install`, and the default server mode.
 - `browser.py` — the `BrowserSession` singleton: one persistent Patchright context,
   cookie injection, login-wall detection, navigation retries, Chromium

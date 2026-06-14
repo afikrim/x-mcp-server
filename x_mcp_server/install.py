@@ -26,10 +26,9 @@ from .exceptions import InstallError
 logger = logging.getLogger(__name__)
 
 # Identity of the server as written into client configs.
-SERVER_NAME = "x-mcp-server"
-GIT_URL = "git+https://github.com/afikrim/x-mcp-server.git"
+SERVER_NAME = "mcp-server-x"
 COMMAND = "uvx"
-ARGS = ["--from", GIT_URL, "x-mcp-server"]
+ARGS = ["mcp-server-x"]
 
 CLIENTS = ("claude-desktop", "claude-code", "codex", "opencode")
 

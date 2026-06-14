@@ -21,10 +21,10 @@ with no local setup.
 uv sync                              # install deps into .venv
 uv run patchright install chromium   # one-time browser download (auto on first run too)
 
-uv run x-mcp-server --login          # interactive sign-in; saves to ~/.x-mcp/profile
-uv run x-mcp-server --check-auth     # verify the session is valid
-uv run x-mcp-server                  # run the server over stdio
-uvx --from . x-mcp-server            # run from a checkout without installing
+uv run mcp-server-x --login          # interactive sign-in; saves to ~/.x-mcp/profile
+uv run mcp-server-x --check-auth     # verify the session is valid
+uv run mcp-server-x                  # run the server over stdio
+uvx --from . mcp-server-x            # run from a checkout without installing
 
 uv run ruff check .                  # lint (must pass)
 uv run ruff format .                 # format
@@ -34,7 +34,7 @@ uv run pytest                        # tests (none yet)
 ## Architecture
 
 - `x_mcp_server/server.py` — builds the `FastMCP` instance, registers tools, defines `check_auth`. Module-level `mcp` is the entry object.
-- `x_mcp_server/__main__.py` — the `x-mcp-server` console script (CLI): `--login`, `--logout`, `--check-auth`, `--install`, `--no-headless`; with no flag it runs `mcp.run()` over stdio. CLI auth commands close the browser cleanly inside the event loop.
+- `x_mcp_server/__main__.py` — the `mcp-server-x` console script (CLI): `--login`, `--logout`, `--check-auth`, `--install`, `--no-headless`; with no flag it runs `mcp.run()` over stdio. CLI auth commands close the browser cleanly inside the event loop.
 - `x_mcp_server/browser.py` — `BrowserSession` singleton: one persistent Patchright context, launched lazily and reused. Injects `auth_token`/`ct0` cookies, detects the `/login` wall, retries transient network errors with backoff, and auto-provisions Chromium when missing.
 - `x_mcp_server/extract.py` — DOM extraction. Runs JS in the page via `page.evaluate`, targets stable `data-testid` selectors. **This is the most fragile code in the repo.**
 - `x_mcp_server/config.py` — `Settings` from `X_*` env vars (and `.env`). `user_data_dir` defaults to `~/.x-mcp/profile`; a validator expands `~` and `$VAR`.
