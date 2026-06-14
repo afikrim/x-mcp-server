@@ -18,6 +18,9 @@ docs/x-tweet/
 .env
 .env.local
 
+# Personal Claude instructions (kept out of the repo)
+CLAUDE.local.md
+
 # Browser session / Patchright user data
 # Default profile now lives at ~/.x-mcp/profile (outside the repo); these cover
 # legacy/relative overrides of X_USER_DATA_DIR.
