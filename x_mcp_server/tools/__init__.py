@@ -13,13 +13,14 @@ from .auth import login, login_with_credentials
 from .post import follow_user, like_tweet, post_tweet, reply_to_tweet
 from .profile import get_profile
 from .search import search_tweets
-from .timeline import get_tweet, get_user_tweets
+from .timeline import get_home_feed, get_tweet, get_user_tweets
 
 
 def register(mcp: FastMCP) -> None:
     """Attach all read and write tools to ``mcp``."""
     # Read / scrape
     mcp.tool(get_profile)
+    mcp.tool(get_home_feed)
     mcp.tool(get_user_tweets)
     mcp.tool(get_tweet)
     mcp.tool(search_tweets)
@@ -35,6 +36,7 @@ def register(mcp: FastMCP) -> None:
 
 __all__ = [
     "register",
+    "get_home_feed",
     "get_profile",
     "get_user_tweets",
     "get_tweet",

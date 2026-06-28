@@ -11,6 +11,37 @@ from ..models import Tweet
 from ._common import collect_tweets
 
 
+async def get_home_feed(limit: int = 20, tab: str = "for_you") -> list[Tweet]:
+    """Fetch posts from the authenticated user's home timeline.
+
+    Navigates to x.com/home and scrolls the feed. Defaults to the algorithmic
+    "For you" tab. Pass tab="following" for the chronological timeline.
+
+    Args:
+        limit: Maximum number of posts to return (1-100).
+        tab: Which timeline tab — "for_you" (algorithmic, default) or
+            "following" (chronological).
+
+    Returns:
+        Recent posts from the home feed with text, timestamp, and engagement
+        counts.
+    """
+    limit = max(1, min(limit, 100))
+    session = get_session()
+    page = await session.new_page()
+    try:
+        await session.goto(page, "https://x.com/home", wait_for='article[data-testid="tweet"]')
+
+        if tab == "following":
+            following_tab = page.locator('div[role="tab"]', has_text="Following")
+            await following_tab.click()
+            await page.wait_for_selector('article[data-testid="tweet"]', timeout=10_000)
+
+        return await collect_tweets(page, limit)
+    finally:
+        await page.close()
+
+
 async def get_user_tweets(username: str, limit: int = 20) -> list[Tweet]:
     """Fetch a user's most recent posts from their profile timeline.
 
