@@ -1,6 +1,6 @@
 [project]
 name = "mcp-server-x"
-version = "0.2.2"
+version = "0.3.0"
 description = "An MCP server that scrapes X (formerly Twitter) using a stealth Patchright browser, exposed over FastMCP."
 readme = "README.md"
 requires-python = ">=3.11"
