@@ -26,7 +26,7 @@ attributes and will need occasional maintenance as the UI changes.
 | `get_profile(username)` | Display name, bio, location, website, join date, follower/following counts. |
 | `get_user_tweets(username, limit=20)` | A user's most recent posts from their timeline. |
 | `get_tweet(url_or_id)` | A single post by URL or numeric status id. |
-| `search_tweets(query, limit=20, latest=True)` | Search across X; supports operators like `from:`, `min_faves:`, `#tag`. |
+| `search_tweets(query, limit=20, latest=True)` | Search across X; supports operators like `from:`, `min_faves:`, `#tag`. Uses Xquik when `XQUIK_API_KEY` is set. |
 | `check_auth()` | Diagnose whether the session is logged in. |
 | `login(timeout_seconds=180)` | Open a visible browser and sign in interactively; persists the session. |
 | `login_with_credentials()` | Best-effort automated DOM login from `X_USERNAME`/`X_PASSWORD` (no 2FA). |
@@ -49,11 +49,11 @@ Everything below is a TODO, modelled on the capabilities of
 
 **Near-term (the current focus)**
 
-- [x] Interactive sign-in — the `login` tool opens a browser for manual auth and
+- [x] Interactive sign-in - the `login` tool opens a browser for manual auth and
   persists the session (run with `X_HEADLESS=false`). Cookie auth still works.
-- [x] `post_tweet(text)` — publish a post from the logged-in account.
+- [x] `post_tweet(text)` - publish a post from the logged-in account.
 
-> Scaffolded but **not yet validated against live X** — selectors and the compose
+> Scaffolded but **not yet validated against live X** - selectors and the compose
 > DOM drift. Verify with a real session before trusting output.
 
 **Write actions (X-native, inspired by `connect_with_person` / `send_message`)**
@@ -70,10 +70,10 @@ Everything below is a TODO, modelled on the capabilities of
 
 **Read actions**
 
-- [ ] `get_my_profile` — the authenticated user's own profile (`get_my_profile`).
-- [ ] `get_home_timeline` — the logged-in home feed (`get_feed`).
-- [ ] `search_users` — people search (`search_people`).
-- [ ] `get_who_to_follow` — recommended accounts (`get_sidebar_profiles`).
+- [ ] `get_my_profile` - the authenticated user's own profile (`get_my_profile`).
+- [ ] `get_home_timeline` - the logged-in home feed (`get_feed`).
+- [ ] `search_users` - people search (`search_people`).
+- [ ] `get_who_to_follow` - recommended accounts (`get_sidebar_profiles`).
 
 **Session & tooling**
 
@@ -94,7 +94,7 @@ uv run mcp-server-x --login
 
 This opens a browser where you sign in manually (handles 2FA and challenges).
 The session is saved to `X_USER_DATA_DIR` (default: `~/.x-mcp/profile`) and reused
-on all future runs — no cookie management needed.
+on all future runs - no cookie management needed.
 
 ### Option 2: Manual session cookies
 
@@ -124,7 +124,7 @@ uv run mcp-server-x --logout
 
 ### With uvx, from PyPI (recommended)
 
-Published as [`mcp-server-x`](https://pypi.org/project/mcp-server-x/) — `uvx` runs
+Published as [`mcp-server-x`](https://pypi.org/project/mcp-server-x/) - `uvx` runs
 it without a local install:
 
 ```bash
@@ -190,7 +190,7 @@ If you'd rather configure by hand:
 }
 ```
 
-No `env` block is needed once you've run `--login` — the session is read from
+No `env` block is needed once you've run `--login` - the session is read from
 `~/.x-mcp/profile`. (You can still pass `X_AUTH_TOKEN` / `X_CSRF_TOKEN` instead.)
 
 ### Local development
@@ -214,12 +214,12 @@ uv run mcp-server-x --logout
 
 **CLI flags:**
 
-- `--login` — Open browser for interactive sign-in, save session.
-- `--logout` — Clear the saved browser profile.
-- `--check-auth` — Check if the session is authenticated and exit.
-- `--install {claude-desktop,claude-code,codex,opencode}` — Register the server in a client's config and exit.
-- `--no-headless` — Show the browser window (useful for debugging login).
-- `--log-level {DEBUG,INFO,WARNING,ERROR}` — Set verbosity (default: INFO).
+- `--login` - Open browser for interactive sign-in, save session.
+- `--logout` - Clear the saved browser profile.
+- `--check-auth` - Check if the session is authenticated and exit.
+- `--install {claude-desktop,claude-code,codex,opencode}` - Register the server in a client's config and exit.
+- `--no-headless` - Show the browser window (useful for debugging login).
+- `--log-level {DEBUG,INFO,WARNING,ERROR}` - Set verbosity (default: INFO).
 
 ### Docker
 
@@ -234,9 +234,14 @@ All settings are environment variables (prefix `X_`). See [`.env.example`](.env.
 for the full list: `X_HEADLESS`, `X_USER_DATA_DIR`, `X_BROWSER_CHANNEL`,
 `X_NAV_TIMEOUT_MS`, `X_LOG_LEVEL`.
 
+Set `XQUIK_API_KEY` to route `search_tweets` through Xquik instead of the
+browser. Other tools keep using the browser session.
+
+Xquik is an independent third-party service. Not affiliated with X Corp. "Twitter" and "X" are trademarks of X Corp.
+
 ## Contributing
 
-Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) for setup,
+Contributions welcome - see [CONTRIBUTING.md](CONTRIBUTING.md) for setup,
 conventions (notably: `data-testid` selectors only, browser-driven not API), and
 the current feature status.
 
@@ -247,14 +252,14 @@ any kind.** Use it in accordance with [X's Terms of Service](https://x.com/tos).
 
 ### Is this safe? Will I get banned?
 
-This server controls a real, logged-in browser session — it does **not** exploit
+This server controls a real, logged-in browser session - it does **not** exploit
 undocumented APIs or bypass authentication. That said, X's Terms of Service
 prohibit scraping and automated access without prior consent, and accounts using
 automated tools **can be rate-limited, restricted, or banned**. There is no
 guarantee of account safety. Use at your own risk, and prefer an account you can
 afford to lose.
 
-Because the session is authenticated, you have agreed to X's terms — so the risk
+Because the session is authenticated, you have agreed to X's terms - so the risk
 here is contractual (breach of the ToS) and operational (account action), not
 just abstract. See the [LinkedIn precedent (hiQ v. LinkedIn)](https://en.wikipedia.org/wiki/HiQ_Labs_v._LinkedIn)
 for how courts have treated authenticated scraping versus public-data scraping.
@@ -268,18 +273,18 @@ Do not redistribute, resell, or build public datasets from the output.
 ### For anything commercial or at scale
 
 Use the [official X API](https://developer.x.com/), or obtain written consent
-from X. The browser route is not defensible at scale — switch to a licensed path
+from X. The browser route is not defensible at scale - switch to a licensed path
 before you grow beyond personal use.
 
 ## Credits
 
 This project is directly inspired by
 [stickerdaniel/linkedin-mcp-server](https://github.com/stickerdaniel/linkedin-mcp-server)
-by [Daniel Sticker](https://github.com/stickerdaniel) — a stealth-browser MCP
+by [Daniel Sticker](https://github.com/stickerdaniel) - a stealth-browser MCP
 server for LinkedIn. The architecture (Patchright + FastMCP, cookie/session auth,
 `uvx` distribution) and the [Roadmap](#roadmap) above follow its design. Go give
 it a star.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT - see [LICENSE](LICENSE).
